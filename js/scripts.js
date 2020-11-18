@@ -75,7 +75,113 @@ const questions = [
 ]
 
 // Substituição do quizz para a primeira pergunta
+function init() {
+  // criar a primeira pergunta
+  createQuestion(0);
+}
+
+// Cria uma pergunta
+function createQuestion(i) {
+
+  // Limpar questão anterior
+  const oldButtons = answerBox.querySelectorAll("button");
+
+  oldButtons.forEach(function(btn) {
+    btn.remove();
+  });
+
+  // Alterar o texto da pergunta
+  const questionText = question.querySelector("#question-text");
+  const questionNumber = question.querySelector("#question-number");
+
+  questionText.textContent = questions[i].question;
+  questionNumber.textContent = i + 1;
+
+  // Insere as alternativas
+  questions[i].answers.forEach(function(answer, i) {
+
+    // Cria o template do botão do quizz
+    const answerTemplate = document.querySelector(".answer-template").cloneNode(true);
+
+    const letterBtn = answerTemplate.querySelector(".btn-letter");
+    const answerText = answerTemplate.querySelector(".question-answer");
+
+    letterBtn.textContent = letters[i];
+    answerText.textContent = answer['answer'];
+
+    answerTemplate.setAttribute("correct-answer", answer["correct"]);
+
+    // Remover hide e template class
+    answerTemplate.classList.remove("hide");
+    answerTemplate.classList.remove("answer-template");
+
+    // Inserir a alternativa na tela
+    answerBox.appendChild(answerTemplate);
+
+    // Inserir um evento de click no botão
+    answerTemplate.addEventListener("click", function() {
+      checkAnswer(this);
+    });
+
+  });
+
+  // Incrementar o número da questão
+  actualQuestion++;
+  
+}
+
+// Verificando resposta do usuário
+function checkAnswer(btn) {
+
+  // Selecionar tofos os botões
+  const buttons = answerBox.querySelectorAll("button");
+
+  // Verifica se a resposta está correta e adiciona classes nos botões
+  buttons.forEach(function(button) {
+    
+    if(button.getAttribute("correct-answer") == "true") {
+
+      button.classList.add("correct-answer");
+
+      // Checa se o usuário acertou a pergunta
+      if(btn === button) {
+        // Incremento dos pontos
+        points++;
+      }
+
+    } else {
+
+      button.classList.add("wrong-answer");
+
+    }
+
+  });
+
+  // Exibir próxima pergunta
+  nextQuestion();
+  
+}
+
+// Exibe a próxima pergunta no quizz
+function nextQuestion() {
+
+  // Timer para o usuário ver as respostas
+  setTimeout(function() {
+
+    // Verifica se ainda há perguntas
+    if(actualQuestion >= questions.length) {
+      
+      // Apresenta a msg de sucesso
+
+    }
+
+    createQuestion(actualQuestion);
+
+  }, 1500);
+    
+}
 
 
-
+// Inicialização do Quizz
+init();
 
